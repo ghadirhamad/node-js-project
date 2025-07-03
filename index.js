@@ -1,17 +1,14 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const express = require("express");
-
-require('dotenv').config();
-const mongoose =require("mongoose");
-
+const mongoose = require("mongoose");
 const app = express();
 
 app.use(express.json());
 
-const Article =require("./models/Article");
-
-//يعني أن كلمة المرور التي وضعتها في URI الخاص بـ MongoDB تحتوي على رموز خاصة (مثل: @, :, /, ?, #, &...) ولم يتم "تهريبها" (escape) بشكل صحيح.
-//how to escape
-console.log(encodeURIComponent('#Misslalymark90'));
+const Article = require("./models/Article");
 
 const startServer = async () => {
   try {
@@ -28,7 +25,9 @@ const startServer = async () => {
 
 startServer();
 
-
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 app.get("/", (req, res) => {
     res.send("hello")
 });
