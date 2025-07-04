@@ -1,25 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Articles</title>
+  <meta charset="UTF-8">
+  <title>كل المقالات</title>
 </head>
 <body>
-    <h1>All Articles page: </h1>
-    <hr/>
-
-    <div style='background-color: palegreen; color:black; padding: 30px;'>
-        <% for( let article of allArticles ) { %>
-        <h1 style="background-color: aliceblue;"><%=article.title%></h1>
-        <br>
-        <h5><%=article.body%></h5>
-        <hr/>
-        <% } %>
-
-
-    </div>
-
-    
+  <h1>قائمة المقالات</h1>
+  <ul>
+    <% allArticles.forEach(article => { %>
+      <li>
+        <a href="/article/<%= article._id %>"><%= article.title %></a>
+      </li>
+    <% }) %>
+  </ul>
+  <a href="/">العودة</a>
 </body>
 </html>

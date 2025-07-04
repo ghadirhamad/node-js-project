@@ -4,140 +4,117 @@ if (process.env.NODE_ENV !== "production") {
 
 const express = require("express");
 const mongoose = require("mongoose");
+const session = require("express-session");
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const methodOverride = require("method-override");
+const Article = require("./models/article");
+
 const app = express();
 
-app.use(express.json());
-
-const Article = require("./models/Article");
-
+// إعداد الاتصال بقاعدة البيانات
 const startServer = async () => {
   try {
     await mongoose.connect(process.env.mongo_uri);
-    console.log('MongoDB connected!');
-    
-    app.listen(3000, () => {
-      console.log("I am listening on port 3000");
-    });
+    console.log("✅ MongoDB connected!");
+    app.listen(3000, () => console.log("🚀 Server running on port 3000"));
   } catch (err) {
-    console.error('Connection error:', err);
+    console.error("❌ Connection error:", err);
   }
 };
-
 startServer();
 
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
+// إعدادات EJS والمنتصف
+app.set("view engine", "ejs");
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(methodOverride("_method"));
+app.use(express.static("public"));
+
+// الجلسات والمصادقة
+app.use(session({
+  secret: "ghadeer-super-secret",
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: "/auth/google/callback"
+}, (accessToken, refreshToken, profile, done) => {
+  done(null, profile);
+}));
+
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
+
+// تمرير المستخدم للـ EJS
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
+
+// راوتات
 app.get("/", (req, res) => {
-    res.send("hello")
+  if (req.isAuthenticated()) {
+    res.render("visitors");
+  } else {
+    res.render("login");
+  }
 });
 
-app.get("/numbers", (req,res)=>{
-    let numbers="";
-    for(let i=0; i<=100; i++){
-        numbers+=i + "-";
-    }
-    //res.sendFile(__dirname + "/views/numbers.ejs")
-    res.render("numbers.ejs", {
-        name : "Ghadeer",
-        numbers : numbers
-    })
+app.get("/article/new", ensureAuthenticated, (req, res) => {
+  res.render("new-article");
 });
 
-//path parameter
-app.get("/findSum/:number1/:number2", (req, res)=>{
-    const num1 = req.params.number1
-    const num2 = req.params.number2
-
-    const total =  Number(num1) + Number(num2)
-    let result =  `the sum is ${total}`;
-
-    res.sendFile(__dirname + "/views/numbers.html");
+app.post("/article", ensureAuthenticated, async (req, res) => {
+  const { articleTitle, articleBody } = req.body;
+  const newArticle = new Article({
+    title: articleTitle,
+    body: articleBody,
+    author: req.user.emails[0].value
+  });
+  await newArticle.save();
+  res.redirect("/show");
 });
 
-//body & query parameter
-app.get("/sayHello", (req,res)=>{
-    console.log(req.body);
-    res.json({
-        name : req.body.name,
-        age : req.query.age,
-        language : "Arabic"
-    });
-    res.send(`hello ${req.body.name}, your age is: ${req.query.age}`)
-    
-})
-
-//json response 
-app.get("/sayhi", (req, res)=>{
-    res.json({
-        name : req.body.name,
-        age : req.query.age,
-        language : "Arabic"
-    });
+app.get("/show", async (req, res) => {
+  const articles = await Article.find();
+  res.render("articles", { allArticles: articles });
 });
 
-app.get("/hi", (req, res) => {
-    res.send("you visited hi")
+app.get("/article/:id", async (req, res) => {
+  const article = await Article.findById(req.params.id);
+  if (!article) return res.status(404).send("المقالة غير موجودة");
+  res.render("article-details", { article });
 });
 
-app.get("/test", (req, res) => {
-    res.send("hyou visited test")
+app.delete("/article/:id", ensureAuthenticated, async (req, res) => {
+  const article = await Article.findById(req.params.id);
+  if (!article) return res.status(404).send("غير موجود");
+  if (article.author !== req.user.emails[0].value) {
+    return res.status(403).send("ما تقدر تحذف مقال مو لك");
+  }
+  await Article.findByIdAndDelete(article._id);
+  res.send("تم الحذف");
 });
 
-app.post("/sendComment", (req, res)=> {
-    res.send("I am here in the post")
-});
-  
-//======ARTICLE ENDPOINT========
-app.post("/article",async (req,res)=>{
-    const newArticle = new Article();
+app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
-    const artTitle = req.body.articleTitle;
-    const artBody = req.body.articleBody;
-    newArticle.title = artTitle;
-    newArticle.body = artBody;
-    newArticle.numberOfLikes = 0;
-    await newArticle.save(); //it take time because it is a async need to be await before send res
-    
-    res.json(newArticle);
+app.get("/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/" }),
+  (req, res) => res.redirect("/")
+);
+
+app.get("/logout", (req, res) => {
+  req.logout(() => res.redirect("/"));
 });
 
-app.get("/articles", async(req, res )=>{
-    const articles = await Article.find();
-    console.log("the article are ", articles);
-    res.json(articles);
-});
-
-app.get("/article/:id", async(req, res)=>{
-    try {
-        const articleId = req.params.id;
-        const article = await Article.findById(articleId);   
-        res.json(article);     
-    } catch (error) {
-        res.send("Error ID not Found", error)
-    }
-});
-
-app.delete("/article/:id", async(req, res)=>{
-    try {
-        const articleId = req.params.id;
-        const article = await Article.findByIdAndDelete(articleId);   
-        res.json(article);     
-    } catch (error) {
-        res.send("Error ID not Found", error)
-    }
-});
-
-app.get("/show", async(req,res)=>{
-    try {
-        const articles =  await Article.find();
-        res.render("articles.ejs", {
-        allArticles : articles
-        
-    });
-    } catch (error) {
-        res.send("error", error);
-    }
-});
-
-
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) return next();
+  res.redirect("/");
+}
