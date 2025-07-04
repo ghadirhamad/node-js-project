@@ -3,15 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <title>مرحباً</title>
+  <style>
+    body {
+      background-color: #f0f4f8;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding: 50px;
+      direction: rtl;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    p {
+      font-size: 22px;
+      color: #444;
+      margin-bottom: 30px;
+    }
+
+    .links a {
+      display: inline-block;
+      margin: 0 10px;
+      padding: 12px 20px;
+      background-color: #007BFF;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    .links a:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
-<body style="text-align: center;">
+<body>
+
   <% if (user) { %>
-    <p>أهلاً <%= user.displayName %>!</p>
+    <p>👋 أهلاً <strong><%= user.displayName %></strong>!</p>
   <% } else { %>
-    <p>زائر</p>
+    <p>👤 مرحبًا أيها الزائر</p>
   <% } %>
-  <a href="/article/new">كتابة مقالة</a> |
-  <a href="/show">عرض المقالات</a> |
-  <a href="/logout">تسجيل الخروج</a>
+
+  <div class="links">
+    <a href="/article/new">✍️ كتابة مقالة</a>
+    <a href="/show">📚 عرض المقالات</a>
+    <a href="/logout">🚪 تسجيل الخروج</a>
+  </div>
+
 </body>
 </html>
+

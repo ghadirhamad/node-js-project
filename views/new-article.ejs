@@ -3,14 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <title>مقالة جديدة</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      padding: 30px;
+      direction: rtl;
+      text-align: right;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin-bottom: 30px;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    textarea {
+      height: 200px;
+      resize: vertical;
+    }
+
+    button {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 6px;
+    }
+
+    a:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-  <h1>إضافة مقالة جديدة</h1>
+
+  <h1>📝 إضافة مقالة جديدة</h1>
+
   <form action="/article" method="POST">
-    <input type="text" name="articleTitle" placeholder="عنوان المقال" required><br>
-    <textarea name="articleBody" placeholder="محتوى المقال" required></textarea><br>
-    <button type="submit">نشر</button>
+    <label for="articleTitle">عنوان المقال</label>
+    <input type="text" name="articleTitle" id="articleTitle" placeholder="أدخل عنوان المقال" required>
+
+    <label for="articleBody">محتوى المقال</label>
+    <textarea name="articleBody" id="articleBody" placeholder="أدخل المحتوى هنا" required></textarea>
+
+    <button type="submit">نشر المقال</button>
   </form>
-  <a href="/">العودة</a>
+
+  <a href="/">العودة للصفحة الرئيسية</a>
+
 </body>
 </html>
+

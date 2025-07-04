@@ -3,16 +3,80 @@
 <head>
   <meta charset="UTF-8">
   <title><%= article.title %></title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      padding: 30px;
+      direction: rtl;
+      text-align: right;
+    }
+
+    h1 {
+      color: #222;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    strong {
+      color: #555;
+    }
+
+    .actions {
+      margin-top: 30px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 16px;
+      margin-left: 10px;
+    }
+
+    .btn-delete {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-delete:hover {
+      background-color: #c82333;
+    }
+
+    .btn-back {
+      background-color: #007BFF;
+      color: white;
+    }
+
+    .btn-back:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
+
   <h1><%= article.title %></h1>
   <p><%= article.body %></p>
   <p><strong>الكاتب:</strong> <%= article.author %></p>
 
-  <form action="/article/<%= article._id %>?_method=DELETE" method="POST">
-    <button type="submit">حذف المقال</button>
-  </form>
+  <div class="actions">
+    <% if (user && user.emails[0].value === article.author) { %>
+      <form action="/article/<%= article._id %>?_method=DELETE" method="POST" style="display: inline;">
+        <button type="submit" class="btn btn-delete">🗑 حذف المقال</button>
+      </form>
+    <% } %>
 
-  <a href="/show">العودة للمقالات</a>
+    <a href="/show" class="btn btn-back">🔙 العودة للمقالات</a>
+  </div>
+
 </body>
 </html>

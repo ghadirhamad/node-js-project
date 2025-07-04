@@ -3,9 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <title>كل المقالات</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+      direction: rtl;
+      text-align: right;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background-color: #fff;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: background 0.3s;
+    }
+
+    li:hover {
+      background-color: #f0f0f0;
+    }
+
+    a {
+      text-decoration: none;
+      color: #007BFF;
+      font-weight: bold;
+    }
+
+    a:hover {
+      color: #0056b3;
+    }
+
+    .nav {
+      margin-top: 30px;
+    }
+
+    .nav a {
+      margin-right: 10px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      background-color: #007BFF;
+      color: white;
+      text-decoration: none;
+    }
+
+    .nav a:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-  <h1>قائمة المقالات</h1>
+
+  <h1>📚 قائمة المقالات</h1>
+
   <ul>
     <% allArticles.forEach(article => { %>
       <li>
@@ -13,13 +75,16 @@
       </li>
     <% }) %>
   </ul>
-  <a href="/">العودة</a>
-  <% if (!user) { %>
-    <a href="/auth/google">تسجيل الدخول</a>
-  <% } else { %>
-    <p>مرحبًا <%= user.displayName %></p>
-    <a href="/logout">تسجيل الخروج</a>
-  <% } %>
+
+  <div class="nav">
+    <a href="/">العودة</a>
+
+    <% if (!user) { %>
+      <a href="/auth/google">تسجيل الدخول</a>
+    <% } else { %>
+      <a href="/logout">تسجيل الخروج</a>
+    <% } %>
+  </div>
 
 </body>
 </html>
