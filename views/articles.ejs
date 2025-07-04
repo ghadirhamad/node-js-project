@@ -14,5 +14,12 @@
     <% }) %>
   </ul>
   <a href="/">العودة</a>
+  <% if (!user) { %>
+    <a href="/auth/google">تسجيل الدخول</a>
+  <% } else { %>
+    <p>مرحبًا <%= user.displayName %></p>
+    <a href="/logout">تسجيل الخروج</a>
+  <% } %>
+
 </body>
 </html>
