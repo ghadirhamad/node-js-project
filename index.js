@@ -18,12 +18,15 @@ const app = express();
 const startServer = async () => {
   try {
     await mongoose.connect(process.env.mongo_uri);
-    console.log("MongoDB connected!");
-    app.listen(3000, () => console.log("Server running on port 3000"));
+    console.log("✅ MongoDB connected!");
+
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   } catch (err) {
-    console.error("Connection error:", err);
+    console.error("❌ Connection error:", err);
   }
 };
+
 startServer();
 
 // Set EJS as the view engine
