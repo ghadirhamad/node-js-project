@@ -8,7 +8,7 @@ const session = require("express-session");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const methodOverride = require("method-override");
-const Article = require("./models/article");
+const Article = require("./models/Article");
 
 const app = express();
 
