@@ -1,7 +1,9 @@
+// Load environment variables from .env file in non-production environments
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
+// Import required modules
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
@@ -12,54 +14,61 @@ const Article = require("./models/Article");
 
 const app = express();
 
-// إعداد الاتصال بقاعدة البيانات
+// Connect to MongoDB and start the server
 const startServer = async () => {
   try {
     await mongoose.connect(process.env.mongo_uri);
-    console.log("✅ MongoDB connected!");
-    app.listen(3000, () => console.log("🚀 Server running on port 3000"));
+    console.log("MongoDB connected!");
+    app.listen(3000, () => console.log("Server running on port 3000"));
   } catch (err) {
-    console.error("❌ Connection error:", err);
+    console.error("Connection error:", err);
   }
 };
 startServer();
 
-// إعدادات EJS والمنتصف
+// Set EJS as the view engine
 app.set("view engine", "ejs");
+
+// Middleware for parsing request bodies and overriding HTTP methods
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
+
+// Serve static files from the "public" directory
 app.use(express.static("public"));
 
-// الجلسات والمصادقة
+// Configure session middleware
 app.use(session({
-  secret: "ghadeer-super-secret",
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false
 }));
 
+// Initialize Passport and session support
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Configure Google OAuth 2.0 strategy for Passport
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: "https://node-js-project-gael.onrender.com/auth/google/callback"
 }, (accessToken, refreshToken, profile, done) => {
+  // Pass the Google profile to the next middleware
   done(null, profile);
 }));
 
-
+// Serialize and deserialize user for session support
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 
-// تمرير المستخدم للـ EJS
+// Make the authenticated user available in all views
 app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
 });
 
-// راوتات
+// Home route: show visitors page if authenticated, otherwise show login page
 app.get("/", (req, res) => {
   if (req.isAuthenticated()) {
     res.render("visitors");
@@ -68,10 +77,12 @@ app.get("/", (req, res) => {
   }
 });
 
+// Render form to create a new article (authenticated users only)
 app.get("/article/new", ensureAuthenticated, (req, res) => {
   res.render("new-article");
 });
 
+// Handle article creation (authenticated users only)
 app.post("/article", ensureAuthenticated, async (req, res) => {
   const { articleTitle, articleBody } = req.body;
   const newArticle = new Article({
@@ -83,17 +94,20 @@ app.post("/article", ensureAuthenticated, async (req, res) => {
   res.redirect("/show");
 });
 
+// Show all articles
 app.get("/show", async (req, res) => {
   const articles = await Article.find();
   res.render("articles", { allArticles: articles });
 });
 
+// Show details for a specific article by ID
 app.get("/article/:id", async (req, res) => {
   const article = await Article.findById(req.params.id);
   if (!article) return res.status(404).send("المقالة غير موجودة");
   res.render("article-details", { article });
 });
 
+// Delete an article (only by its author)
 app.delete("/article/:id", ensureAuthenticated, async (req, res) => {
   const article = await Article.findById(req.params.id);
   if (!article) return res.status(404).send("غير موجود");
@@ -104,17 +118,21 @@ app.delete("/article/:id", ensureAuthenticated, async (req, res) => {
   res.send("تم الحذف");
 });
 
+// Start Google OAuth authentication
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
+// Handle Google OAuth callback
 app.get("/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => res.redirect("/")
 );
 
+// Logout route
 app.get("/logout", (req, res) => {
   req.logout(() => res.redirect("/"));
 });
 
+// Middleware to ensure the user is authenticated
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) return next();
   res.redirect("/");
