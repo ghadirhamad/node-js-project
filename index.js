@@ -160,8 +160,11 @@ app.get("/auth/google/callback",
 );
 
 // Logout route
-app.get("/logout", (req, res) => {
-  req.logout(() => res.redirect("/"));
+app.get("/logout", (req, res, next) => {
+  req.logout(err => {
+    if (err) return next(err);
+    res.redirect("/");
+  });
 });
 
 // Middleware to ensure the user is authenticated
