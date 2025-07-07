@@ -63,6 +63,10 @@
   </style>
 </head>
 <body>
+
+  <h1><%= article.title %></h1>
+  <p><%= article.body %></p>
+  <p><strong>الكاتب:</strong> <%= article.author %></p>
 <div class="actions" style="display: inline;">
 
   <% if (user && user.emails[0].value === article.author) { %>
@@ -71,7 +75,7 @@
     </form>
   <% } %>
 
- 
+
   <form action="/article/<%= article._id %>/like" method="POST" style="display: inline;">
     <button type="submit">❤️ أعجبني (<%= article.likes %>)</button>
   </form>
