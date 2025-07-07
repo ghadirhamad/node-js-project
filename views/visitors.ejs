@@ -37,17 +37,10 @@
       background-color: #0056b3;
     }
 
-    .header img {
-      width: 30px;
-      height: 30px;
-    }
   </style>
 </head>
 <body>
-  <div class="header">
-    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="logo">
-    Articles
-  </div> 
+  <%- include("partials/header") %>
 
   <% if (user) { %>
     <p>👋 أهلاً <strong><%= user.displayName %></strong>!</p>

@@ -17,23 +17,6 @@
       align-items: center;
     }
 
-    .header {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      font-size: 28px;
-      font-weight: 700;
-      color: #2c3e50;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .header img {
-      width: 30px;
-      height: 30px;
-    }
-
     .login-box {
       background: white;
       padding: 45px 35px;
@@ -72,10 +55,7 @@
   </style>
 </head>
 <body>
-  <div class="header">
-    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="logo">
-    Articles
-  </div>
+  <%- include("partials/header") %>
 
   <div class="login-box">
     <h1>تسجيل الدخول</h1>

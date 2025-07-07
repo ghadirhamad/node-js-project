@@ -13,22 +13,6 @@
       text-align: right;
     }
 
-    .header {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 10px;
-      font-size: 24px;
-      font-weight: 700;
-      color: #2c3e50;
-      margin-bottom: 30px;
-    }
-
-    .header img {
-      width: 32px;
-      height: 32px;
-    }
-
     h1 {
       color: #333;
       margin-bottom: 20px;
@@ -89,10 +73,7 @@
 </head>
 <body>
 
-  <div class="header">
-    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="logo">
-    Articles
-  </div>
+  <%- include("partials/header") %>
 
   <h1>📝 إضافة مقالة جديدة</h1>
 
