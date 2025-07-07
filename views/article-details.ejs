@@ -63,21 +63,21 @@
   </style>
 </head>
 <body>
+<div class="actions" style="display: inline;">
 
-  <h1><%= article.title %></h1>
-  <p><%= article.body %></p>
-  <p><strong>الكاتب:</strong> <%= article.author %></p>
-  <div class="actions" style="display: inline;">
-    <% if (user && user.emails[0].value === article.author) { %>
-      <form action="/article/<%= article._id %>?_method=DELETE" method="POST" style="display: inline;">
-        <button type="submit" class="btn btn-delete">🗑 حذف المقال</button>
-        <button type="submit">👍 أعجبني (<%= article.likes %>)</button>
-    <% } %>
+  <% if (user && user.emails[0].value === article.author) { %>
+    <form action="/article/<%= article._id %>?_method=DELETE" method="POST" style="display: inline;">
+      <button type="submit" class="btn btn-delete">🗑 حذف المقال</button>
     </form>
-  </div>
+  <% } %>
 
-    <a href="/show" class="btn btn-back">🔙 العودة للمقالات</a>
-  </div>
+ 
+  <form action="/article/<%= article._id %>/like" method="POST" style="display: inline;">
+    <button type="submit">❤️ أعجبني (<%= article.likes %>)</button>
+  </form>
+
+  <a href="/show" class="btn btn-back">🔙 العودة للمقالات</a>
+</div>
 
 </body>
 </html>
