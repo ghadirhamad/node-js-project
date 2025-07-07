@@ -67,13 +67,14 @@
   <h1><%= article.title %></h1>
   <p><%= article.body %></p>
   <p><strong>الكاتب:</strong> <%= article.author %></p>
-
-  <div class="actions">
+  <div class="actions" style="display: inline;">
     <% if (user && user.emails[0].value === article.author) { %>
       <form action="/article/<%= article._id %>?_method=DELETE" method="POST" style="display: inline;">
         <button type="submit" class="btn btn-delete">🗑 حذف المقال</button>
       </form>
     <% } %>
+  </div>
+
 
     <a href="/show" class="btn btn-back">🔙 العودة للمقالات</a>
   </div>

@@ -119,6 +119,21 @@ app.get("/article/:id", async (req, res) => {
   res.render("article-details", { article });
 });
 
+app.post("/article/:id/like", async (req, res) => {
+  try {
+    const article = await Article.findById(req.params.id);
+    if (!article) return res.status(404).send("المقالة غير موجودة");
+
+    article.likes += 1;
+    await article.save();
+    
+    res.redirect(`/article/${article._id}`);
+   
+  } catch (err) {
+    res.status(500).send("خطأ في الإعجاب");
+  }
+});
+
 // Delete an article (only by its author)
 app.delete("/article/:id", ensureAuthenticated, async (req, res) => {
   const article = await Article.findById(req.params.id);
