@@ -71,19 +71,28 @@ app.use((req, res, next) => {
   next();
 });
 
-// Home route: show visitors page if authenticated, otherwise show login page
+// Home route: show visitors page for authenticated users or guests, otherwise show login page
 app.get("/", (req, res) => {
   if (req.isAuthenticated()) {
-    res.render("visitors");
+    res.render("visitors", { userType: "authenticated" });
+  } else if (req.session.guest) {
+    res.render("visitors", { userType: "guest" });
   } else {
     res.render("login");
   }
 });
 
+
 // Render form to create a new article (authenticated users only)
 app.get("/article/new", ensureAuthenticated, (req, res) => {
   res.render("new-article");
 });
+
+app.get("/guest", (req, res) => {
+  req.session.guest = true;
+  res.redirect("/"); 
+});
+
 
 // Handle article creation (authenticated users only)
 app.post("/article", ensureAuthenticated, async (req, res) => {
@@ -137,6 +146,8 @@ app.get("/logout", (req, res) => {
 
 // Middleware to ensure the user is authenticated
 function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) return next();
-  res.redirect("/");
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect("/login"); // أو res.redirect("/") لو تحبين
 }

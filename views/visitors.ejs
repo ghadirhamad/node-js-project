@@ -42,7 +42,7 @@
 
   <% if (user) { %>
     <p>👋 أهلاً <strong><%= user.displayName %></strong>!</p>
-  <% } else { %>
+  <% } if (userType === "guest") { %>
     <p>👤 مرحبًا أيها الزائر</p>
   <% } %>
 
