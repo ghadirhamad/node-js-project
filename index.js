@@ -119,19 +119,24 @@ app.get("/article/:id", async (req, res) => {
   res.render("article-details", { article });
 });
 
-app.post("/article/:id/like", async (req, res) => {
-  try {
-    const article = await Article.findById(req.params.id);
-    if (!article) return res.status(404).send("المقالة غير موجودة");
+// Like/unlike an article (authenticated users only)
+app.post("/article/:id/like", ensureAuthenticated, async (req, res) => {
+  const article = await Article.findById(req.params.id);
+  if (!article) return res.status(404).send("المقالة غير موجودة");
 
+  const userEmail = req.user.emails[0].value;
+
+  // If the user already liked the article, remove the like; otherwise, add a like
+  if (article.likedBy.includes(userEmail)) {
+    article.likes -= 1;
+    article.likedBy = article.likedBy.filter(email => email !== userEmail);
+  } else {
     article.likes += 1;
-    await article.save();
-    
-    res.redirect(`/article/${article._id}`);
-   
-  } catch (err) {
-    res.status(500).send("خطأ في الإعجاب");
+    article.likedBy.push(userEmail);
   }
+
+  await article.save();
+  res.redirect(`/article/${article._id}`);
 });
 
 // Delete an article (only by its author)
