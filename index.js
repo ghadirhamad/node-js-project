@@ -149,5 +149,11 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect("/login"); // أو res.redirect("/") لو تحبين
+  if (req.session.guest) {
+    return res.render("not-allowed", {
+      message: "قم بتسجيل الدخول حتى تتمكن من نشر مقالتك"
+    });
+  }
+  res.redirect("/");
 }
+
