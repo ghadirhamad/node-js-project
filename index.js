@@ -171,7 +171,7 @@ function ensureAuthenticated(req, res, next) {
   }
   if (req.session.guest) {
     return res.render("not-allowed", {
-      message: "قم بتسجيل الدخول حتى تتمكن من نشر مقالتك"
+      message: " قم بتسجيل الدخول حتى تتمكن من نشر مقالتك والتفاعل" 
     });
   }
   res.redirect("/");
