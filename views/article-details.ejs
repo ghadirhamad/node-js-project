@@ -73,8 +73,10 @@
         <button type="submit" class="btn btn-delete">🗑 حذف المقال</button>
       </form>
     <% } %>
+    <form action="/article/<%= article._id %>/like" method="POST" style="display: inline;">
+      <button type="submit">👍 أعجبني (<%= article.likes %>)</button>
+    </form>
   </div>
-
 
     <a href="/show" class="btn btn-back">🔙 العودة للمقالات</a>
   </div>
