@@ -93,6 +93,7 @@
   </button>
 </form>
 
+<hr>
 
   <% if (user && user.emails[0].value === article.author) { %>
     <form action="/article/<%= article._id %>?_method=DELETE" method="POST" style="display: inline;">
