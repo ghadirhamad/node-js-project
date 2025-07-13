@@ -5,7 +5,7 @@ const articleSchema = new mongoose.Schema({
   body: { type: String, required: true },
   author: { type: String, required: true },
   likes: { type: Number, default: 0 },
-  likedBy: [{ type: String }] // 👈 قائمة بالإيميلات اللي عملوا لايك
+  likedBy: [{ type: String }] 
 }, { timestamps: true });
 
 
