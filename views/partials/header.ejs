@@ -1,22 +1,152 @@
-<div class="header">
-  <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="logo">
-  <span>Articles</span>
-</div>
+<nav class="navbar">
+  <div class="navbar-brand">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+    </svg>
+    <span>مقالاتي</span>
+  </div>
+</nav>
 
 <style>
-  .header {
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --primary: #6C63FF;
+    --primary-dark: #574fd6;
+    --secondary: #FF6584;
+    --bg: #F7F8FC;
+    --card: #ffffff;
+    --text: #2D3748;
+    --text-light: #718096;
+    --border: #E2E8F0;
+    --success: #48BB78;
+    --danger: #FC8181;
+    --shadow: 0 4px 20px rgba(108, 99, 255, 0.08);
+    --shadow-hover: 0 8px 30px rgba(108, 99, 255, 0.15);
+    --radius: 16px;
+  }
+
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    direction: rtl;
+    text-align: right;
+    min-height: 100vh;
+  }
+
+  .navbar {
+    background: white;
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .navbar-brand {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 26px;
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 40px;
-    direction: rtl;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary);
   }
 
-  .header img {
-    width: 32px;
-    height: 32px;
+  .navbar-brand svg {
+    color: var(--primary);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s ease;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+  }
+  .btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(108,99,255,0.3);
+  }
+
+  .btn-secondary {
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover {
+    background: var(--border);
+    transform: translateY(-1px);
+  }
+
+  .btn-danger {
+    background: var(--danger);
+    color: white;
+  }
+  .btn-danger:hover {
+    background: #e53e3e;
+    transform: translateY(-1px);
+  }
+
+  .btn-success {
+    background: var(--success);
+    color: white;
+  }
+  .btn-success:hover {
+    background: #38a169;
+    transform: translateY(-1px);
+  }
+
+  .btn-gray {
+    background: #718096;
+    color: white;
+  }
+  .btn-gray:hover {
+    background: #4a5568;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
   }
 </style>
